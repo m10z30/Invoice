@@ -19,11 +19,13 @@ namespace Invoice.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllInvoices(GetAllInvoicesQuery query)
+        public async Task<IActionResult> GetAllInvoices([FromQuery] GetAllInvoicesQuery query)
         {
             var invoices = await _context.Invoices
+                        .OrderByDescending(i => i.Id)
                         .Skip(query.Offset)
                         .Take(query.Limit)
+                        .Where(i => i.CustomerName != "--reset--")
                         .ToListAsync();
 
             return Ok(invoices);
@@ -58,7 +60,7 @@ namespace Invoice.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("reset")]
         public async Task<IActionResult> ResetInvoiceId()
         {
             var lastInvoice = await _context.Invoices.OrderByDescending(i => i.Id).FirstOrDefaultAsync();
