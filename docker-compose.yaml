@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  postgres_db:
+    image: postgres:latest
+    container_name: PostgresBookArchive 
+    restart: always
+    # credentials will be stored in `.env` file, for now it is for testing.
+    environment:
+        - POSTGRES_USER=test
+        - POSTGRES_PASSWORD=test
+        - POSTGRES_DB=invoice_db
+    ports:
+      - '5432:5432'
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
