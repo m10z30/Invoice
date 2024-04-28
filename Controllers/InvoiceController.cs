@@ -41,7 +41,7 @@ namespace Invoice.Controllers
             if (lastInvoice.InvoiceId % 1000 >= 900)
             {
                 reset = true;
-                newInvoiceId = lastInvoice!.InvoiceId - (lastInvoice.InvoiceId % 1000) + 1000;
+                newInvoiceId = lastInvoice!.InvoiceId - (lastInvoice.InvoiceId % 1000) + 1001;
             }
 
             var invoice = new InvoiceModel
