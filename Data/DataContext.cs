@@ -40,7 +40,7 @@ public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
 
     public DataContextFactory() : base()
     {
-        
+
     }
 
     public DataContext CreateDbContext(string[] args)

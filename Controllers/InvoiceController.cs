@@ -53,8 +53,9 @@ namespace Invoice.Controllers
 
             await _context.AddAsync(invoice);
             await _context.SaveChangesAsync();
-            if (reset) {
-                return CreatedAtAction("CreateInvoice", new { Message = "Created", Detail = "invoice count has been reset" });    
+            if (reset)
+            {
+                return CreatedAtAction("CreateInvoice", new { Message = "Created", Detail = "invoice count has been reset" });
             }
             return CreatedAtAction("CreateInvoice", new { Message = "Created" });
         }
