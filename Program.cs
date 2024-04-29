@@ -1,5 +1,6 @@
 using Invoice.Data;
 using Invoice.Extensions;
+using Invoice.Middlewares;
 using Invoice.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,7 @@ internal class Program
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+        app.ConfigureExceptionMiddleware();
         app.UseLoggingMiddleware();
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
