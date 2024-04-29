@@ -1,4 +1,3 @@
-using System.Transactions;
 using Invoice.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +7,7 @@ namespace Invoice.Utils
     {
         public static async Task<int> GetNumber(DataContext context, int tries = 0)
         {
-            using var transaction = context.Database.BeginTransaction();
+            using var transaction = context.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
             try
             {
                 await transaction.CreateSavepointAsync("transaction"); // begin transaction
