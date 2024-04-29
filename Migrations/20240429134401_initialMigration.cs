@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Invoice.Migrations
 {
     /// <inheritdoc />
-    public partial class initial_migration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,11 +27,19 @@ namespace Invoice.Migrations
                     table.PrimaryKey("PK_Invoices", x => x.Id);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Invoices_InvoiceId_Id",
-                table: "Invoices",
-                columns: new[] { "InvoiceId", "Id" },
-                unique: true);
+            migrationBuilder.CreateTable(
+                name: "MetaDatas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MetaDatas", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -39,6 +47,9 @@ namespace Invoice.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Invoices");
+
+            migrationBuilder.DropTable(
+                name: "MetaDatas");
         }
     }
 }

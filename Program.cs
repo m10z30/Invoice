@@ -34,15 +34,13 @@ internal class Program
         {
             var context = scope.ServiceProvider.GetRequiredService<DataContext>();
 
-            var firstInvoice = await context.Invoices.Select(i => i.Id == 1).FirstOrDefaultAsync();
-            if (!firstInvoice){
-                var invoice = new InvoiceModel{
-                  Id = 1,
-                  InvoiceId = 1000,
-                  CustomerName = "--reset--",
-                  CreatedAt = DateTime.UtcNow  
+            var countData = await context.MetaDatas.Where(m => m.Name == "Count").FirstOrDefaultAsync();
+            if (countData == null){
+                var data = new MetaData{
+                  Name = "Count",
+                  Value = 0,
                 };
-                await context.AddAsync(invoice);
+                await context.AddAsync(data);
                 await context.SaveChangesAsync();
             }
         }

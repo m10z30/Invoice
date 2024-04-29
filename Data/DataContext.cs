@@ -16,14 +16,7 @@ public class DataContext : DbContext
     }
 
     public DbSet<InvoiceModel> Invoices { set; get; }
-
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<InvoiceModel>()
-            .HasIndex(i => new { i.InvoiceId, i.Id })
-            .IsUnique(true);
-    }
+    public DbSet<MetaData> MetaDatas { set; get; }
 
 }
 

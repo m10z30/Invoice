@@ -42,10 +42,27 @@ namespace Invoice.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InvoiceId", "Id")
-                        .IsUnique();
-
                     b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("Invoice.Models.MetaData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MetaDatas");
                 });
 #pragma warning restore 612, 618
         }

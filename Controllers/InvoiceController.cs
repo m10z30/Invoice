@@ -2,6 +2,7 @@ using Invoice.Data;
 using Invoice.Dtos;
 using Invoice.Models;
 using Invoice.Queries;
+using Invoice.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +26,6 @@ namespace Invoice.Controllers
                         .OrderByDescending(i => i.Id)
                         .Skip(query.Offset)
                         .Take(query.Limit)
-                        .Where(i => i.CustomerName != "--reset--")
                         .ToListAsync();
 
             return Ok(invoices);
@@ -35,44 +35,24 @@ namespace Invoice.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateInvoice(CreateInvoiceDto createInvoiceDto)
         {
-            var lastInvoice = await _context.Invoices.OrderByDescending(i => i.Id).FirstOrDefaultAsync();
-            var reset = false;
-            var newInvoiceId = lastInvoice!.InvoiceId + 1;
-            if (lastInvoice.InvoiceId % 1000 >= 900)
-            {
-                reset = true;
-                newInvoiceId = lastInvoice!.InvoiceId - (lastInvoice.InvoiceId % 1000) + 1001;
-            }
-
+            
             var invoice = new InvoiceModel
             {
                 CustomerName = createInvoiceDto.CustomerName,
-                InvoiceId = newInvoiceId,
+                InvoiceId = await MetaDataUtil.GetNumber(_context),
                 CreatedAt = DateTime.UtcNow
             };
 
             await _context.AddAsync(invoice);
             await _context.SaveChangesAsync();
-            if (reset)
-            {
-                return CreatedAtAction("CreateInvoice", new { Message = "Created", Detail = "invoice count has been reset" });
-            }
-            return CreatedAtAction("CreateInvoice", new { Message = "Created" });
+            return CreatedAtAction("CreateInvoice", new { Message = "Created", Invoice = invoice });
         }
 
 
         [HttpGet("reset")]
         public async Task<IActionResult> ResetInvoiceId()
         {
-            var lastInvoice = await _context.Invoices.OrderByDescending(i => i.Id).FirstOrDefaultAsync();
-            var invoice = new InvoiceModel
-            {
-                CustomerName = "--reset--",
-                InvoiceId = lastInvoice!.InvoiceId - (lastInvoice.InvoiceId % 1000) + 1000,
-                CreatedAt = DateTime.UtcNow
-            };
-            await _context.AddAsync(invoice);
-            await _context.SaveChangesAsync();
+            await MetaDataUtil.ResetNumber(_context);
 
             return Ok(new { Message = "Invoice Count Reset" });
         }
