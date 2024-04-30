@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Invoice.Utils
 {
-    public static class MetaDataUtil
+    public class MetaDataUtil
     {
-        public static async Task<int> GetNumber(DataContext context, int tries = 0)
+        public async Task<int> GetNumber(DataContext context, int tries = 0)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Invoice.Utils
             }
         }
 
-        public static async Task ResetNumber(DataContext context, int tries = 0)
+        public async Task ResetNumber(DataContext context, int tries = 0)
         {
             try
             {

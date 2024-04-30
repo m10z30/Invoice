@@ -12,11 +12,13 @@ namespace Invoice.Controllers
     [Route("api/[controller]")]
     public class InvoiceController : ControllerBase
     {
+        private readonly Numbers _numbers;
         private readonly DataContext _context;
 
-        public InvoiceController(DataContext context)
+        public InvoiceController(DataContext context, Numbers numbers)
         {
             _context = context;
+            _numbers = numbers;
         }
 
         [HttpGet]
@@ -39,7 +41,7 @@ namespace Invoice.Controllers
             var invoice = new InvoiceModel
             {
                 CustomerName = createInvoiceDto.CustomerName,
-                InvoiceId = await MetaDataUtil.GetNumber(_context),
+                InvoiceId = await _numbers.GetNumberAsync(),
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -50,9 +52,9 @@ namespace Invoice.Controllers
 
 
         [HttpGet("reset")]
-        public async Task<IActionResult> ResetInvoiceId()
+        public IActionResult ResetInvoiceId()
         {
-            await MetaDataUtil.ResetNumber(_context);
+            _numbers.ResetNumber();
 
             return Ok(new { Message = "Invoice Count Reset" });
         }

@@ -2,6 +2,7 @@ using Invoice.Data;
 using Invoice.Extensions;
 using Invoice.Middlewares;
 using Invoice.Models;
+using Invoice.Utils;
 using Microsoft.EntityFrameworkCore;
 
 internal class Program
@@ -21,6 +22,8 @@ internal class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddScoped<MetaDataUtil>();
+        builder.Services.AddSingleton<Numbers>();
 
         var app = builder.Build();
         app.ConfigureExceptionMiddleware();
